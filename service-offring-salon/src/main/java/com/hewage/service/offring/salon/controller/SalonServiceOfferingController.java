@@ -8,14 +8,9 @@ import com.hewage.service.offring.salon.repository.ServiceOfferingRepository;
 import com.hewage.service.offring.salon.services.ServicesOfferingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +18,7 @@ import java.util.Set;
 public class SalonServiceOfferingController {
 
     private final ServicesOfferingService servicesOfferingService;
-    private final HandlerMapping resourceHandlerMapping;
+
 
     @PostMapping
     public ResponseEntity<ServiceOffering> createService(
@@ -39,6 +34,17 @@ public class SalonServiceOfferingController {
         ServiceOffering serviceOfferings = servicesOfferingService
                 .createServiceOffering(salonDTO,serviceDTO,categoryDTO);
 
+        return ResponseEntity.ok(serviceOfferings);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ServiceOffering> updateService(
+            @PathVariable Long id,
+            @RequestBody ServiceOffering serviceOffering
+    )throws Exception{
+
+        ServiceOffering serviceOfferings = servicesOfferingService
+                .updateService(id, serviceOffering);
         return ResponseEntity.ok(serviceOfferings);
     }
 }

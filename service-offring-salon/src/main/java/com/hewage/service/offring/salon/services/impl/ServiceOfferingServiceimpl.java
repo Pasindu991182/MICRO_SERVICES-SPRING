@@ -26,10 +26,10 @@ public class ServiceOfferingServiceimpl implements ServicesOfferingService {
 
         ServiceOffering serviceOffering = new ServiceOffering();
         serviceOffering.setImage(serviceDTO.getImage());
-        serviceOffering.setSalonId(serviceDTO.getSalonId());
-        serviceOffering.setName(salonDTO.getName());
+        serviceOffering.setSalonId(salonDTO.getId());
+        serviceOffering.setName(serviceDTO.getName());
         serviceOffering.setDescription(serviceDTO.getDescription());
-        serviceOffering.setCategoryId(serviceDTO.getId());
+        serviceOffering.setCategoryId(categoryDTO.getId());
         serviceOffering.setPrice(serviceDTO.getPrice());
         serviceOffering.setDuration(serviceDTO.getDuration());
 
@@ -59,10 +59,12 @@ public class ServiceOfferingServiceimpl implements ServicesOfferingService {
     @Override
     public Set<ServiceOffering> GetAllServiceBySalonId(Long salonId, Long categoryId) {
         Set<ServiceOffering> services = serviceOfferingRepository.findBySalonId(salonId);
-        if(services==null || services.isEmpty()){
-            services = services.stream().filter((service)->service.getCategoryId() != null &&
-                    service.getCategoryId() == categoryId).collect(Collectors.toSet());
+        if (categoryId != null && !services.isEmpty()) {
+            services = services.stream()
+                    .filter(service -> categoryId.equals(service.getCategoryId()))
+                    .collect(Collectors.toSet());
         }
+
         return services;
     }
 
